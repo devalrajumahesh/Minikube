@@ -1,0 +1,62 @@
+========MINIKUBE============
+
+1) Minikube has been installed and configured in the environment. Check that it is properly installed, by running the minikube version command
+
+		# minikube version
+
+2) Start the cluster, by running the minikube start command
+
+		 # minikube start
+
+3) Details of the cluster and its health status can be discovered via 
+
+			# kubectl cluster-info
+
+4)To view the nodes in the cluster using 
+
+			# kubectl get nodes
+
+5)With a running Kubernetes cluster, containers can now be deployed. Using kubectl run, it allows containers to be deployed onto the cluster 
+
+		# kubectl run nodejs --image=devalrajumahesh/node:2 --port=80
+
+6)Once the container is running it can be exposed via different networking options, depending on requirements. 
+
+One possible solution is NodePort, that provides a dynamic port to a container.
+
+
+		# kubectl expose deployment nodejs --port=80 --type=NodePort
+
+7)  The command below finds the allocated port and executes a HTTP request.
+
+	# export PORT=$(kubectl get svc first-deployment -o go-template='{{range.spec.ports}}{{if .nodePort}}{{.nodePort}}{{"\n"}}{{end}}{{end}}')
+
+		#echo "Accessing host01:$PORT"
+ 	
+		#curl host01:$PORT
+
+8) Enable the dashboard using Minikube with the command 
+
+		#minikube addons enable dashboard
+
+9)  kubectl apply -f /opt/kubernetes-dashboard.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: kubernetes-dashboard
+  name: kubernetes-dashboard-katacoda
+  namespace: kube-system
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 9090
+    nodePort: 30000
+  selector:
+    app: kubernetes-dashboard
+  type: NodePort
+
+
+ https://2886795370-30000-frugo04.environments.katacoda.com/
